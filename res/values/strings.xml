@@ -3,5 +3,8 @@
     <string name="initial_msg">別のアプリで何らかのURLを開いて下さい。\n
     ブラウザ選択ダイアログが表示されたら、このアプリを選択して下さい。\n
     開いたURLの履歴が下に表示されます。</string>
-    <string name="app_name">intent01</string>  
+    <string name="app_name">intent02</string>
+    <string name="mnu_exit">閉じる</string>
+    <string name="mnu_send">メール送信</string>  
+    <string name="mnu_clear">全削除</string>  
 </resources>

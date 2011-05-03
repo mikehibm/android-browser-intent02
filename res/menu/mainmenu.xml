@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/mnu_send" android:id="@+id/mnuSend"></item>
+    <item android:title="@string/mnu_clear" android:id="@+id/mnuClear"></item>
+    <item android:title="@string/mnu_exit" android:id="@+id/mnuExit"></item>
+</menu>
