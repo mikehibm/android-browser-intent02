@@ -8,7 +8,6 @@ tmp/**/*
 *~
 *.apk
 *.jar
-.classpath
 .metadata
 .DS_Store
 Thumbs.db
