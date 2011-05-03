@@ -116,6 +116,9 @@ public class IntentReceiveActivity extends Activity {
 			case R.id.mnuClear:
 				clearList();
 				break;
+			case R.id.mnuPref:
+				openPref();
+				break;
 			default:
 				break;
 		}
@@ -130,15 +133,20 @@ public class IntentReceiveActivity extends Activity {
 		sendEmail(url);
 	}
 	
+	private void openPref() {
+		Intent intent = new Intent(this, Pref.class); 
+        startActivity(intent);
+	}
+	
 	private void sendEmail(String msg){
 		try {
-			String to_addr = "makotoishida@gmail.com"; //Pref.getToAddr1(this); 
-			String prefix = "[SendToMe] "; //Pref.getPrefix(this); 
-			String footer = "";			//Pref.getFooter(this); 
+			String to_addr = Pref.getToAddr1(this); 
+			String prefix = Pref.getPrefix(this); 
+			String footer = Pref.getFooter(this); 
 				
-			//ValidateBeforeSend(to_addr, prefix, footer, receivedTitle, receivedUrl);
+			ValidateBeforeSend(to_addr, prefix, footer);
 
-			String subject = prefix; //+ receivedTitle; 
+			String subject = prefix; 
 			String message = msg + "\n\n" + footer;
 				
 			Intent intent = new Intent();
@@ -158,8 +166,15 @@ public class IntentReceiveActivity extends Activity {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 					}
-				})
- 				.show();
+				}).show();
 	    }
 	}
+	
+	// Preference設定をValidateする。
+	private void ValidateBeforeSend(String to_addr, String prefix, String footer) throws Exception {
+		if (to_addr == null || "".equals(to_addr)){
+			throw new Exception(getString(R.string.msg_invalid_to_addr));
+		}
+	}
+	
 }
