@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,7 +19,8 @@ import android.widget.TextView;
 public class IntentReceiveActivity extends Activity {
 
 	//リストに表示する項目を保持する配列。（staticでないと毎回クリアされてしまう。）
-	static ArrayAdapter<String> adapter;			
+	static ArrayAdapter<String> adapter;
+	private String selected_url = null;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,44 @@ public class IntentReceiveActivity extends Activity {
         
     	ListView list = (ListView)findViewById(R.id.list);
     	list.setAdapter(adapter);
+    	
+
+    	String[] str_items = {"Open","Send","Delete"};
+		final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+	   		.setIcon(R.drawable.icon)
+	   		.setTitle("Please select")
+	   		.setItems(str_items, 
+	   				new DialogInterface.OnClickListener(){
+	   					public void onClick(DialogInterface dialog, int which) {
+	   						switch (which){
+	   						case 0:
+		   						openBrowser(selected_url);
+		   						break;
+	   						case 1:
+	   							sendEmail(selected_url);
+	   							break;
+	   						case 2:
+	   							deleteUrl(selected_url);
+	   							break;
+	   						default:
+	   							break;
+	   						}
+	   					}
+	   				}
+	   			);
+    	
+    	list.setOnItemClickListener(
+    		new AdapterView.OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					//リストの項目がタップされた時の処理
+					ListView listview = (ListView)parent;
+					selected_url = (String)listview.getItemAtPosition(position);
+					dialog.show();
+				}
+			}
+    	);
 
     	processIntent(getIntent());
     }
@@ -52,9 +93,8 @@ public class IntentReceiveActivity extends Activity {
 				adapter.insert(url, 0);				
 			}
 			
-			//標準ブラウザで開く
-			intent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
-			startActivity(intent);
+			//ブラウザで開く
+			openBrowser(url);
     	}
 
     	showCount();
@@ -80,6 +120,11 @@ public class IntentReceiveActivity extends Activity {
 		return -1;
 	}
 	
+	private void deleteUrl(String selectedUrl) {
+		adapter.remove(selected_url);
+		showCount();
+	}
+
 	private void clearList(){
 		adapter.clear();
 		showCount();
@@ -137,7 +182,17 @@ public class IntentReceiveActivity extends Activity {
 		Intent intent = new Intent(this, Pref.class); 
         startActivity(intent);
 	}
-	
+
+    private void openBrowser(String url){
+		Intent intent = new Intent();
+		intent.setAction(Intent.ACTION_VIEW);
+		intent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
+		intent.addCategory(Intent.CATEGORY_DEFAULT);
+		intent.addCategory(Intent.CATEGORY_BROWSABLE);
+		intent.setData(Uri.parse(url));
+		startActivity(intent);
+    }
+
 	private void sendEmail(String msg){
 		try {
 			String to_addr = Pref.getToAddr1(this); 
