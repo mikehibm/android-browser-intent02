@@ -36,36 +36,39 @@ public class IntentReceiveActivity extends Activity {
     	list.setAdapter(adapter);
     	
 
-    	String[] str_items = {"Open","Send","Delete"};
+		//リストの項目がタップされた時に開くダイアログを準備。
+    	String[] str_items = { getString(R.string.mnu_browser) , 
+    							  getString(R.string.mnu_send), 
+    							  getString(R.string.mnu_delete)};
 		final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
 	   		.setIcon(R.drawable.icon)
-	   		.setTitle("Please select")
+	   		.setTitle(getString(R.string.mnu_select))
 	   		.setItems(str_items, 
-	   				new DialogInterface.OnClickListener(){
-	   					public void onClick(DialogInterface dialog, int which) {
-	   						switch (which){
-	   						case 0:
-		   						openBrowser(selected_url);
-		   						break;
-	   						case 1:
-	   							sendEmail(selected_url);
-	   							break;
-	   						case 2:
-	   							deleteUrl(selected_url);
-	   							break;
-	   						default:
-	   							break;
-	   						}
+	   			new DialogInterface.OnClickListener(){
+	   				//ダイアログの項目が選択された時の処理。
+	   				public void onClick(DialogInterface dialog, int which) {
+	   					switch (which){
+	   					case 0:
+		   					openBrowser(selected_url);
+		   					break;
+	   					case 1:
+	   						sendEmail(selected_url);
+	   						break;
+	   					case 2:
+	   						deleteUrl(selected_url);
+	   						break;
+	   					default:
+	   						break;
 	   					}
 	   				}
-	   			);
+	   			}
+	   		);
     	
+		//リストの項目がタップされた時の処理
     	list.setOnItemClickListener(
     		new AdapterView.OnItemClickListener() {
-
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					//リストの項目がタップされた時の処理
 					ListView listview = (ListView)parent;
 					selected_url = (String)listview.getItemAtPosition(position);
 					dialog.show();
@@ -156,13 +159,13 @@ public class IntentReceiveActivity extends Activity {
 				finish();
 				break;
 			case R.id.mnuSend:
-				sendEmailAll();
+				sendEmailAll();		//全項目をメール送信。
 				break;
 			case R.id.mnuClear:
-				clearList();
+				clearList();			//リストをクリア。
 				break;
 			case R.id.mnuPref:
-				openPref();
+				openPref();			//設定画面。
 				break;
 			default:
 				break;
@@ -170,6 +173,7 @@ public class IntentReceiveActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	//リストの全項目をメールで送信。
 	private void sendEmailAll(){
 		String url = "";
 		for (int i = 0; i < adapter.getCount() ; i++) {
@@ -178,12 +182,14 @@ public class IntentReceiveActivity extends Activity {
 		sendEmail(url);
 	}
 	
+	//設定画面を開く。
 	private void openPref() {
 		Intent intent = new Intent(this, Pref.class); 
         startActivity(intent);
 	}
 
-    private void openBrowser(String url){
+	//ブラウザを開く。
+	private void openBrowser(String url){
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_VIEW);
 		intent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
@@ -193,6 +199,7 @@ public class IntentReceiveActivity extends Activity {
 		startActivity(intent);
     }
 
+	//メール送信画面を開く。
 	private void sendEmail(String msg){
 		try {
 			String to_addr = Pref.getToAddr1(this); 
@@ -225,7 +232,7 @@ public class IntentReceiveActivity extends Activity {
 	    }
 	}
 	
-	// Preference設定をValidateする。
+	//設定内容をチェックする。
 	private void ValidateBeforeSend(String to_addr, String prefix, String footer) throws Exception {
 		if (to_addr == null || "".equals(to_addr)){
 			throw new Exception(getString(R.string.msg_invalid_to_addr));
