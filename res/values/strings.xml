@@ -19,11 +19,11 @@
 
 	<string name="pref_prefix">メールの件名</string>
 	<string name="pref_prefix_summary"></string>
-	<string name="pref_prefix_default">[SendToMe] </string>
+	<string name="pref_prefix_default">[Test] </string>
 
 	<string name="pref_footer">メール本文の末尾</string>
 	<string name="pref_footer_summary"></string>
-	<string name="pref_footer_default">Sent via Send To Me!</string>
+	<string name="pref_footer_default">Sent by intent02</string>
     
 	<string name="msg_invalid_to_addr">宛先のEmailアドレスが空白かまたは正しくありません。Emailアドレスを設定して下さい。\n(例： youremail@gmail.com)</string>
 	<string name="mnu_select">選択して下さい</string>
